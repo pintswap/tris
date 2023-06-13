@@ -1,4 +1,4 @@
-# wock
+# tris
 
 Install project with yarn
 
@@ -14,8 +14,3 @@ To generate metadata, ensure that gettext and ipfs are installed, then run
 cd content
 bash gendata.sh
 ```
-
-
-## Author
-
-These leaned out fools makin' dope NFTs
