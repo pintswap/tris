@@ -1,0 +1,24 @@
+{
+  "name": "tris",
+  "version": "0.1.0",
+  "description": "TRIS NFT",
+  "main": "lib/index.js",
+  "repository": "https://github.com/pintswap/tris",
+  "author": "pintswap",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build:images": "bash scripts/modulate.sh",
+    "build:contracts": "hardhat compile",
+    "build": "npm-run-all build:images build:contracts",
+    "node": "hardhat node"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@uniswap/v3-periphery": "^1.4.3",
+    "ethers": "5.7.2",
+    "hardhat": "^2.14.0",
+    "hardhat-deploy": "^0.11.26",
+    "hardhat-deploy-ethers": "^0.3.0-beta.13"
+  }
+}
