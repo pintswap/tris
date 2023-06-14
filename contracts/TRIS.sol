@@ -8,7 +8,7 @@ contract TRIS is ERC721Permit, Ownable {
   mapping (uint256 => uint256) public nonces;
   function version() public pure returns (string memory) { return "1"; }
   constructor() ERC721Permit("TRIS", "TRIS", "1") Ownable() {
-    _setBaseURI("ipfs://bafybeiezpbqq6favps74erwn35ircae2xqqdmczxjs7imosdkn6ahmuxme/");
+    _setBaseURI("ipfs://bafybeienialkdrppvdfdanzuiwnt45m4hhckayxrvvhktrrvmowwkwr45a/");
   }
   function _getAndIncrementNonce(uint256 _tokenId) internal override virtual returns (uint256) {
     uint256 nonce = nonces[_tokenId];
