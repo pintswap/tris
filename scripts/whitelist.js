@@ -1,19 +1,8 @@
-'use strict';
+const { useMerkleGenerator } = require("../merkle/use-merkle");
+const path = require("path");
+const fs = require('fs');
 
-const { ethers, deployments } = require('hardhat');
-
-module.exports = async () => {
-  const [ signer ] = await ethers.getSigners();
-
-  await deployments.deploy('TRIS', {
-    contractName: 'TRIS',
-    args: [],
-    from: await signer.getAddress()
-  });
-  const wock = await ethers.getContract('TRIS');
-  
-  console.log('deployed TRIS');
-
+(async () => {
   // Merkle Trees
   const merkleDir = path.join(__dirname, '..', 'merkle', process.env.TEST ? 'localhost' : 'mainnet');
 
@@ -21,6 +10,5 @@ module.exports = async () => {
   const whitelistMerkleInput = require(path.join(merkleDir, 'tris-input'));
   const whitelistMerkleTree = useMerkleGenerator(whitelistMerkleInput);
   fs.writeFileSync(path.join(merkleDir, 'tris-whitelist.json'), JSON.stringify(whitelistMerkleTree, null, 2));
-  await wock.setWhitelistMerkleRoot(whitelistMerkleTree.merkleRoot);
   console.log('\n---- NFT WHITELIST MERKLE CONFIGURED ----');
-};
+})().catch((err) => console.error(err))

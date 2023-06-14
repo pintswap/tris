@@ -11,7 +11,11 @@
     "build:images": "bash scripts/modulate.sh",
     "build:contracts": "hardhat compile",
     "build": "npm-run-all build:images build:contracts",
-    "node": "hardhat node"
+    "node": "hardhat node",
+    "node:dev": "TEST=1  CHAIN_ID=31337 hardhat node"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts-new": "npm:@openzeppelin/contracts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
