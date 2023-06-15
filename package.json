@@ -11,7 +11,13 @@
     "build:images": "bash scripts/modulate.sh",
     "build:contracts": "hardhat compile",
     "build": "npm-run-all build:images build:contracts",
-    "node": "hardhat node"
+    "node": "hardhat node",
+    "build:whitelist": "node scripts/whitelist.js",
+    "test": "hardhat test"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.5.0",
+    "merkletreejs": "^0.2.31"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
@@ -19,6 +25,10 @@
     "ethers": "5.7.2",
     "hardhat": "^2.14.0",
     "hardhat-deploy": "^0.11.26",
-    "hardhat-deploy-ethers": "^0.3.0-beta.13"
+    "hardhat-deploy-ethers": "^0.3.0-beta.13",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "ethereum-waffle": "^3.4.0"
   }
 }

@@ -1,5 +1,6 @@
 require('hardhat-deploy');
 require('hardhat-deploy-ethers');
+const { ethers } = require("ethers");
 const ETHEREUM_RPC = "https://mainnet.infura.io/v3/816df2901a454b18b7df259e61f92cd2";
 
 const ETHERSCAN_API_KEYS = {
@@ -13,7 +14,7 @@ const accounts = [
   wallet || ethers.Wallet.createRandom().privateKey
 ];
 module.exports = {
-  solidity: '0.7.6',
+  solidity: '0.8.20',
   networks: {
     mainnet: {
       url: ETHEREUM_RPC,
