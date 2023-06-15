@@ -2,38 +2,46 @@ const { expect, use } = require('chai')
 const { ethers } = require('hardhat')
 const { MerkleTree } = require('merkletreejs')
 const { keccak256 } = ethers.utils
+const { padBuffer } = require('../utils/helpers')
 
 use(require('chai-as-promised'))
 
 describe('WhitelistSale', function () {
-  it('should get metadata', async () => {
-    const wock = await hre.ethers.getContract('TRIS');
-    console.log(await wock.tokenURI('0x01'));
-  })
-
-  it('allow only whitelisted accounts to mint', async () => {
-    const accounts = await hre.ethers.getSigners()
-    const whitelisted = accounts.slice(0, 5)
-    const notWhitelisted = accounts.slice(5, 10)
-
-    const padBuffer = (addr) => {
-      return Buffer.from(addr.substr(2).padStart(32*2, 0), 'hex')
-    }
+  let contract, whitelisted, notWhitelisted, merkleTree;
+  
+  beforeEach(async () => {
+    const accounts = await hre.ethers.getSigners();
+    whitelisted = accounts.slice(0, 5);
+    notWhitelisted = accounts.slice(5, 10);
 
     const leaves = whitelisted.map(account => padBuffer(account.address))
-    console.log("leaves", leaves)
-    const tree = new MerkleTree(leaves, keccak256, { sort: true })
-    const merkleRoot = tree.getHexRoot()
+    merkleTree = new MerkleTree(leaves, keccak256, { sort: true })
+    const merkleRoot = merkleTree.getHexRoot()
 
-    const WhitelistSale = await ethers.getContractFactory('TRIS')
-    const whitelistSale = await WhitelistSale.deploy(merkleRoot)
-    await whitelistSale.deployed()
+    const Tris = await ethers.getContractFactory('TRIS')
+    contract = await Tris.deploy(merkleRoot)
+    await contract.deployed()
+  })
 
-    const merkleProof = tree.getHexProof(padBuffer(whitelisted[0].address))
-    const invalidMerkleProof = tree.getHexProof(padBuffer(notWhitelisted[0].address))
+  it('should get metadata', async () => {
+    const merkleProof = merkleTree.getHexProof(padBuffer(whitelisted[0].address))
+    await contract.mint(merkleProof);
+    expect(await contract.tokenURI(ethers.utils.hexlify(1))).to.equal('ipfs://bafybeienialkdrppvdfdanzuiwnt45m4hhckayxrvvhktrrvmowwkwr45a/1')
+  })
 
-    await expect(whitelistSale.mint(merkleProof)).to.not.be.rejected
-    await expect(whitelistSale.mint(merkleProof)).to.be.rejectedWith('already claimed')
-    await expect(whitelistSale.connect(notWhitelisted[0]).mint(invalidMerkleProof)).to.be.rejectedWith('invalid merkle proof')
+  it('should not allow non-whitelisted users to mint', async () => {
+    const invalidMerkleProof = merkleTree.getHexProof(padBuffer(notWhitelisted[0].address))
+    await expect(contract.connect(notWhitelisted[0]).mint(invalidMerkleProof)).to.be.rejectedWith('invalid merkle proof')
+  })
+
+  it('should allow whitelisted users to mint', async () => {
+    const merkleProof = merkleTree.getHexProof(padBuffer(whitelisted[0].address))
+    await expect(contract.mint(merkleProof)).to.not.be.rejected
+  })
+
+  it('should only allow one NFT per whitelisted address', async () => {
+    const merkleProof = merkleTree.getHexProof(padBuffer(whitelisted[0].address))
+    await expect(contract.mint(merkleProof)).to.not.be.rejected
+    await expect(contract.mint(merkleProof)).to.be.rejectedWith('already claimed')
   })
 })
