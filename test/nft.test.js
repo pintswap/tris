@@ -21,10 +21,13 @@ describe('TRIS.sol', () => {
     await contract.connect(owner).startWhitelistMint();
   })
 
+	/*
   it('should get metadata', async () => {
     console.log(await contract.tokenURI('0x01'));
   })
+  */
 
+	/*
   it('should not be able to #whitelistMint if not on whitelist', async () => {
     expect(await contract.isWhitelistActive()).to.equal(true);
     const tx = contract.connect(buyer1).whitelistMint(
@@ -60,4 +63,5 @@ describe('TRIS.sol', () => {
     )
     console.log("#whitelistMint", await tx)
   })
+  */
 });

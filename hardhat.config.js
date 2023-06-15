@@ -14,7 +14,7 @@ const accounts = [
   wallet || ethers.Wallet.createRandom().privateKey
 ];
 module.exports = {
-  solidity: '0.7.6',
+  solidity: '0.8.20',
   networks: {
     mainnet: {
       url: ETHEREUM_RPC,

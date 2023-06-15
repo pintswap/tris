@@ -16,10 +16,8 @@
     "test": "hardhat test",
     "build:whitelist": "node scripts/whitelist.js"
   },
-  "dependencies": {
-    "@openzeppelin/contracts-new": "npm:@openzeppelin/contracts"
-  },
   "devDependencies": {
+    "@openzeppelin/contracts": "^4.9.0",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "@uniswap/v3-periphery": "^1.4.3",
     "chai": "^4.3.7",
