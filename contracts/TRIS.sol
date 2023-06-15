@@ -9,9 +9,6 @@ contract TRIS is ERC721Permit, Ownable {
   using MerkleProof for bytes32[];
 
   bool private whitelistMintStarted;
-  bool private publicMintStarted;
-
-  bytes32 public privateMerkleRoot;
   bytes32 public whitelistMerkleRoot;
 
   mapping (uint256 => uint256) public nonces;
@@ -28,11 +25,6 @@ contract TRIS is ERC721Permit, Ownable {
     _;
   }
 
-  modifier whenPublicMint() {
-    require(!publicMintStarted);
-    _;
-  }
-
   // === Minters ===
   function whitelistMint(
     uint256 _index,
@@ -40,7 +32,7 @@ contract TRIS is ERC721Permit, Ownable {
     uint256 _tokenId,
     bytes32[] memory proof
   ) external payable whenWhitelistMint {
-    require(!isAddressWhitelisted(proof, _index, _to));
+    require(isAddressWhitelisted(proof, _index, _to, _tokenId));
 
     _mint(_to, _tokenId);
   }
@@ -57,19 +49,15 @@ contract TRIS is ERC721Permit, Ownable {
   function isAddressWhitelisted(
     bytes32[] memory proof,
     uint256 _index,
-    address _to
+    address _to,
+    uint256 _tokenId
   ) internal view returns (bool) {
-    return proof.verify(whitelistMerkleRoot, keccak256(abi.encodePacked(_index, _to)));
+    return proof.verify(whitelistMerkleRoot, keccak256(abi.encodePacked(_index, _to, _tokenId)));
   }
 
   // === Starters ===
   function startWhitelistMint() external onlyOwner {
-    require(whitelistMerkleRoot == bytes32(0));
     whitelistMintStarted = true;
-  }
-
-  function startPublicMint() external onlyOwner {
-    publicMintStarted = true;
   }
 
   function setWhitelistMerkleRoot(bytes32 value) external onlyOwner {

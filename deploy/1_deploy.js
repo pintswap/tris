@@ -1,6 +1,9 @@
 'use strict';
 
 const { ethers, deployments } = require('hardhat');
+const path = require("path");
+const fs = require('fs');
+const { useMerkleGenerator } = require("../merkle/use-merkle");
 
 module.exports = async () => {
   const [ signer ] = await ethers.getSigners();

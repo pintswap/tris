@@ -12,7 +12,9 @@
     "build:contracts": "hardhat compile",
     "build": "npm-run-all build:images build:contracts",
     "node": "hardhat node",
-    "node:dev": "TEST=1  CHAIN_ID=31337 hardhat node"
+    "node:dev": "TEST=1  CHAIN_ID=31337 hardhat node",
+    "test": "hardhat test",
+    "build:whitelist": "node scripts/whitelist.js"
   },
   "dependencies": {
     "@openzeppelin/contracts-new": "npm:@openzeppelin/contracts"
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "@uniswap/v3-periphery": "^1.4.3",
+    "chai": "^4.3.7",
     "ethers": "5.7.2",
     "hardhat": "^2.14.0",
     "hardhat-deploy": "^0.11.26",
