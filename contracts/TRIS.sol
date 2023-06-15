@@ -34,20 +34,19 @@ contract TRIS is ERC721Permit, Ownable {
 
   // ===== Modifiers =====
   modifier whenWhitelistMint() {
-    require(!whitelistMintStarted);
+    require(whitelistMintStarted, "!started");
     _;
   }
   mapping (address => uint256) public whitelistMinted;
 
   // === Minters ===
   function whitelistMint(
-    uint256 _index,
     address _to,
     uint256 _amountAllocated,
     uint256 _amountToMint,
     bytes32[] memory proof
   ) external payable whenWhitelistMint {
-    require(isAddressWhitelisted(proof, _index, _to, _amountAllocated));
+    require(isAddressWhitelisted(proof, _to, _amountAllocated));
     uint256 minted = whitelistMinted[_to];
     require(minted + _amountToMint <= _amountAllocated, "!allocated");
     whitelistMinted[_to] += _amountToMint;
@@ -70,19 +69,18 @@ contract TRIS is ERC721Permit, Ownable {
 
   function isAddressWhitelisted(
     bytes32[] memory proof,
-    uint256 _index,
     address _to,
-    uint256 _tokenId
+    uint256 _amount
   ) internal view returns (bool) {
-    return proof.verify(whitelistMerkleRoot, keccak256(abi.encodePacked(_index, _to, _tokenId)));
+    return proof.verify(whitelistMerkleRoot, keccak256(abi.encodePacked(_to, _amount)));
   }
 
   // === Starters ===
-  function startWhitelistMint() external onlyOwner {
+  function startWhitelistMint() public onlyOwner {
     whitelistMintStarted = true;
   }
 
-  function setWhitelistMerkleRoot(bytes32 value) external onlyOwner {
+  function setWhitelistMerkleRoot(bytes32 value) public onlyOwner {
     whitelistMerkleRoot = value;
   }
 

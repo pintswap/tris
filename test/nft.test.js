@@ -2,13 +2,13 @@ const hre = require('hardhat');
 const { ethers } = require("ethers");
 const { expect } = require("chai");
 
-const WHITELIST_CLAIMS = require("../merkle/localhost/tris-whitelist.json").claims;
+const { claims: WHITELIST_CLAIMS, merkleRoot: WHITELIST_ROOT } = require("../merkle/localhost/tris-whitelist.json");
 const ethToSend = { value: ethers.utils.parseEther('1') }
 
 describe('TRIS.sol', () => {
   let contract, owner, buyer1, buyer1Address;
 
-  beforeEach(async () => {
+  before(async () => {
     await hre.deployments.fixture();
     [owner, buyer1] = await hre.ethers.getSigners();
     buyer1Address = await buyer1.getAddress();
@@ -19,6 +19,7 @@ describe('TRIS.sol', () => {
       owner
     );
     await contract.connect(owner).startWhitelistMint();
+    await contract.connect(owner).setWhitelistMerkleRoot(WHITELIST_ROOT);
   })
 
 	/*
@@ -30,9 +31,9 @@ describe('TRIS.sol', () => {
   it('should not be able to #whitelistMint if not on whitelist', async () => {
     expect(await contract.isWhitelistActive()).to.equal(true);
     const tx = contract.connect(buyer1).whitelistMint(
-      WHITELIST_CLAIMS[buyer1Address].index,
+//      WHITELIST_CLAIMS[buyer1Address].index,
       buyer1Address,
-      ethers.utils.hexlify(1),
+      WHITELIST_CLAIMS[buyer1Address].amount,
       ethers.utils.hexlify(1),
       WHITELIST_CLAIMS[buyer1Address].proof,
       ethToSend
