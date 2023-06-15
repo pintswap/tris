@@ -27,19 +27,19 @@ describe('TRIS.sol', () => {
   })
   */
 
-	/*
   it('should not be able to #whitelistMint if not on whitelist', async () => {
     expect(await contract.isWhitelistActive()).to.equal(true);
     const tx = contract.connect(buyer1).whitelistMint(
       WHITELIST_CLAIMS[buyer1Address].index,
       buyer1Address,
       ethers.utils.hexlify(1),
+      ethers.utils.hexlify(1),
       WHITELIST_CLAIMS[buyer1Address].proof,
       ethToSend
     )
     console.log("#whitelistMint", await tx)
   })
-
+	/*
   it('should not be able to #whitelistMint if not sending enough ETH', async () => {
     expect(await contract.isWhitelistActive()).to.equal(true);
     const tx = contract.connect(buyer1).whitelistMint(

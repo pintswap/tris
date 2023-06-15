@@ -10,6 +10,7 @@ contract TRIS is ERC721Permit, Ownable {
 
   bool private whitelistMintStarted;
   bytes32 public whitelistMerkleRoot;
+  uint256 public cap = uint256(1000);
 
   mapping (uint256 => uint256) public nonces;
   string public __baseURI;
@@ -23,6 +24,9 @@ contract TRIS is ERC721Permit, Ownable {
     _uri = __baseURI;
   }
   function version() public pure returns (string memory) { return "1"; }
+  function setCap(uint256 _cap) public onlyOwner {
+    cap = _cap;
+  }
 
   constructor() ERC721Permit("TRIS", "TRIS", "1") Ownable() {
     _setBaseURI("ipfs://bafybeiezpbqq6favps74erwn35ircae2xqqdmczxjs7imosdkn6ahmuxme/");
@@ -33,20 +37,29 @@ contract TRIS is ERC721Permit, Ownable {
     require(!whitelistMintStarted);
     _;
   }
+  mapping (address => uint256) public whitelistMinted;
 
   // === Minters ===
   function whitelistMint(
     uint256 _index,
     address _to,
-    uint256 _tokenId,
+    uint256 _amountAllocated,
+    uint256 _amountToMint,
     bytes32[] memory proof
   ) external payable whenWhitelistMint {
-    require(isAddressWhitelisted(proof, _index, _to, _tokenId));
-
-    _mint(_to, _tokenId);
+    require(isAddressWhitelisted(proof, _index, _to, _amountAllocated));
+    uint256 minted = whitelistMinted[_to];
+    require(minted + _amountToMint <= _amountAllocated, "!allocated");
+    whitelistMinted[_to] += _amountToMint;
+    uint256 start = totalSupply();
+    uint256 end = start + _amountAllocated;
+    require(end <= cap, "!cap");
+    for (uint256 i = start; i < end; i++) {
+      _mint(_to, i);
+    }
   }
-
   function mint(address _to, uint256 _tokenId) public onlyOwner {
+    require(totalSupply() < cap, "!cap");
     _mint(_to, _tokenId);
   }
 
