@@ -1,5 +1,5 @@
 const { expect, use } = require('chai')
-const { ethers } = require('hardhat')
+const { ethers, network } = require('hardhat')
 const { MerkleTree } = require('merkletreejs')
 const { keccak256 } = ethers.utils
 const { padBuffer } = require('../utils/helpers')

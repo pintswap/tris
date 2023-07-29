@@ -12,6 +12,8 @@ module.exports = async () => {
   const merkleRoot = merkleTree.getHexRoot();
 
   const [ signer ] = await ethers.getSigners();
+  console.log("Deploying TRIS with the account:", signer.address);
+  
   await deployments.deploy(merkleRoot, {
     contractName: 'TRIS',
     args: [],

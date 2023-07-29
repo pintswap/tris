@@ -14,7 +14,9 @@
     "node": "hardhat node",
     "build:whitelist": "node scripts/whitelist.js",
     "build:whitelist:local": "TEST=1 node scripts/whitelist.js",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "deploy:sepolia": "hardhat --network sepolia deploy",
+    "deploy:eth": "hardhat deploy"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
