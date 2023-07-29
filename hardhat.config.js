@@ -3,7 +3,7 @@ require('hardhat-deploy-ethers');
 const { ethers } = require("ethers");
 
 const ETHEREUM_RPC = "https://mainnet.infura.io/v3/816df2901a454b18b7df259e61f92cd2";
-const SEPOLIA_RPC = `https://eth-sepolia.g.alchemy.com/v2/L3sVJLslfsGM2kRo3Y_VXBS9-lIO0BZ5`;
+const SEPOLIA_RPC = `https://eth-sepolia.g.alchemy.com/v2/<API_KEY>`;
 const MATIC_RPC = "https://polygon-mainnet.infura.io/v3/816df2901a454b18b7df259e61f92cd2";
 
 const ETHERSCAN_API_KEYS = {
