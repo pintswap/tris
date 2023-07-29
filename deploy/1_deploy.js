@@ -1,9 +1,9 @@
 'use strict';
 
 const { MerkleTree } = require('merkletreejs')
-const { keccak256 } = ethers.utils
 const { padBuffer } = require('../utils/helpers')
 const { ethers, deployments } = require('hardhat');
+const { keccak256 } = ethers.utils
 const { WHITELISTED } = require('../utils/whitelisted');
 
 module.exports = async () => {
@@ -14,11 +14,7 @@ module.exports = async () => {
   const [ signer ] = await ethers.getSigners();
   console.log("Deploying TRIS with the account:", signer.address);
   
-  await deployments.deploy(merkleRoot, {
-    contractName: 'TRIS',
-    args: [],
-    from: await signer.getAddress()
-  });
-  const wock = await ethers.getContract('TRIS');
-  console.log('Deployed TRIS to:', wock.address);
+  const TRIS = await ethers.getContractFactory('TRIS');
+  const tris = await TRIS.deploy(merkleRoot);
+  console.log('Deployed TRIS to:', tris.address);
 };
