@@ -25,6 +25,7 @@ describe('Public Sale', function () {
     contract = await Tris.deploy(merkleRoot)
     await contract.deployed()
 
+    await contract.connect(whitelisted[0]).startMinting()
     await contract.connect(whitelisted[0]).startPublicMint()
   })
 

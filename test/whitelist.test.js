@@ -23,6 +23,8 @@ describe('Whitelist Sale', function () {
     const Tris = await ethers.getContractFactory('TRIS')
     contract = await Tris.deploy(merkleRoot)
     await contract.deployed()
+
+    await contract.connect(whitelisted[0]).startMinting()
   })
 
   it('should not allow minting if amount sent is less than 0.27 ETH', async () => {

@@ -22,7 +22,7 @@ describe('Admin Functions', function () {
 
     const Tris = await ethers.getContractFactory('TRIS')
     contract = await Tris.deploy(merkleRoot)
-    await contract.deployed()
+    await contract.deployed();
   })
 
   it('should only allow owner to start public mint', async () => {
@@ -38,5 +38,10 @@ describe('Admin Functions', function () {
   it('should not allow any user to use adminMint function', async () => {
     await expect(contract.connect(notWhitelisted[0]).adminMint(whitelisted[1].address, 5)).to.be.rejected;
     expect ((await contract.balanceOf(whitelisted[1].address)).toString()).to.equal('0')
+  })
+
+  it('should only allow contract owner to enable minting', async () => {
+    expect(contract.connect(whitelisted[1]).startMinting()).to.be.rejected;
+    expect(contract.connect(whitelisted[0]).startMinting()).to.not.be.rejected;
   })
 })

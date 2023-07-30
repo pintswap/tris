@@ -13,6 +13,7 @@ contract TRIS is ERC721Permit, Ownable {
   mapping(address => bool) public claimed;
   mapping (uint256 => uint256) public nonces;
 
+  bool public isMintingEnabled = false;
   bool public isPublicMint = false;
   uint16 constant MAX_SUPPLY = 1000; 
   uint256 private PRICE = 0.27 ether; 
@@ -35,16 +36,24 @@ contract TRIS is ERC721Permit, Ownable {
     _uri = __baseURI;
   }
 
-  // Public Mint
+  // Admin
   function startPublicMint() public onlyOwner {
     require(isPublicMint == false, "Public mint is already enabled");
     isPublicMint = true;
   }
 
-  function publicMint() public view returns (bool) { return isPublicMint; }
+  function startMinting() public onlyOwner {
+    require(isMintingEnabled == false, "Minting is already enabled");
+    isMintingEnabled = true;
+  }
 
   // Mint
+  function mintingEnabled() public view returns (bool) { return isMintingEnabled; }
+
+  function publicMint() public view returns (bool) { return isPublicMint; }
+
   function mint(bytes32[] calldata merkleProof) public payable {
+    require(isMintingEnabled, "Minting is not enabled");
     require(msg.value >= PRICE, "Not enough ETH sent");
     require(nextTokenId < MAX_SUPPLY, "Exceeds token supply");
     require(claimed[msg.sender] == false, "User already claimed");
