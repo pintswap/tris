@@ -12,14 +12,17 @@
     "build:contracts": "hardhat compile",
     "build": "npm-run-all build:images build:contracts",
     "node": "hardhat node",
-    "build:whitelist": "node scripts/whitelist.js",
-    "build:whitelist:local": "TEST=1 node scripts/whitelist.js",
     "test": "hardhat test",
+    "deploy:eth": "hardhat deploy",
+    "start-mint:eth": "hardhat run scripts/start-mint.js",
+    "start-public:eth": "hardhat run scripts/start-public-mint.js",
     "deploy:sepolia": "hardhat --network sepolia deploy",
-    "deploy:eth": "hardhat deploy"
+    "start-mint:sepolia": "hardhat run --network sepolia scripts/start-mint.js",
+    "start-public:sepolia": "hardhat run --network sepolia scripts/start-public-mint.js"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
+    "dotenv": "^16.3.1",
     "merkletreejs": "^0.3.10"
   },
   "devDependencies": {
