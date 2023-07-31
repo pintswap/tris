@@ -1,5 +1,5 @@
 const { expect, use } = require('chai')
-const { ethers, network } = require('hardhat')
+const { ethers } = require('hardhat')
 const { MerkleTree } = require('merkletreejs')
 const { keccak256 } = ethers.utils
 const { padBuffer } = require('../utils/helpers')
@@ -45,4 +45,14 @@ describe('Public Sale', function () {
     expect((await contract.balanceOf(notWhitelisted[0].address)).toString()).to.equal('1')
     await expect(contract.connect(notWhitelisted[0]).mint(invalidMerkleProof, price)).to.be.rejectedWith('User already claimed')
   })
+
+  it("should only allow 1000 NFT's to be minted", async () => {
+    expect((await contract.totalSupply()).toString()).to.equal('0');
+    let arbitrarySigners = Array.from({ length: 1000 }, () => ethers.Wallet.createRandom())
+    arbitrarySigners = arbitrarySigners.map(signer => signer.connect(ethers.provider))
+    await Promise.all(arbitrarySigners.map(async signer => await notWhitelisted[4].sendTransaction({ to: signer.address, value: ethers.utils.parseEther("0.5") })))
+    const minters = await Promise.all(arbitrarySigners.map(async signer => await contract.connect(signer).mint([], price)));
+    expect((await contract.totalSupply()).toString()).to.equal('1000');
+    await expect(contract.connect(notWhitelisted[3]).mint([], price)).to.be.rejectedWith('Exceeds token supply')
+  }).timeout(100000);
 })

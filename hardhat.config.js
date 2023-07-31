@@ -1,9 +1,10 @@
 require('hardhat-deploy');
 require('hardhat-deploy-ethers');
+require('dotenv').config()
 const { ethers } = require("ethers");
 
 const ETHEREUM_RPC = "https://mainnet.infura.io/v3/816df2901a454b18b7df259e61f92cd2";
-const SEPOLIA_RPC = `https://eth-sepolia.g.alchemy.com/v2/<API_KEY>`;
+const SEPOLIA_RPC = `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`;
 const MATIC_RPC = "https://polygon-mainnet.infura.io/v3/816df2901a454b18b7df259e61f92cd2";
 
 const ETHERSCAN_API_KEYS = {
@@ -13,9 +14,7 @@ const ETHERSCAN_API_KEYS = {
 };
 
 const wallet = process.env.WALLET;
-const accounts = [
-  wallet || ethers.Wallet.createRandom().privateKey
-];
+const accounts = [wallet || ethers.Wallet.createRandom().privateKey];
 
 module.exports = {
   solidity: '0.8.20',

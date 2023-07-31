@@ -44,4 +44,8 @@ describe('Admin Functions', function () {
     expect(contract.connect(whitelisted[1]).startMinting()).to.be.rejected;
     expect(contract.connect(whitelisted[0]).startMinting()).to.not.be.rejected;
   })
+
+  it('should set the owner to be the deployer of the contract', async () => {
+    expect(await contract.owner()).to.equal(whitelisted[0].address)
+  })
 })
