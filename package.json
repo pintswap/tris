@@ -13,9 +13,9 @@
     "build": "npm-run-all build:images build:contracts",
     "node": "hardhat node",
     "test": "hardhat test",
-    "deploy:eth": "hardhat deploy",
-    "start-mint:eth": "hardhat run scripts/start-mint.js",
-    "start-public:eth": "hardhat run scripts/start-public-mint.js",
+    "deploy:eth": "hardhat --network mainnet deploy",
+    "start-mint:eth": "hardhat run --network mainnet scripts/start-mint.js",
+    "start-public:eth": "hardhat run --network mainnet scripts/start-public-mint.js",
     "deploy:sepolia": "hardhat --network sepolia deploy",
     "start-mint:sepolia": "hardhat run --network sepolia scripts/start-mint.js",
     "start-public:sepolia": "hardhat run --network sepolia scripts/start-public-mint.js"
