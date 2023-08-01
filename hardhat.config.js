@@ -1,5 +1,6 @@
 require('hardhat-deploy');
 require('hardhat-deploy-ethers');
+require('@nomiclabs/hardhat-etherscan');
 require('dotenv').config()
 const { ethers } = require("ethers");
 
