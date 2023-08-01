@@ -6,7 +6,7 @@ import { ERC721Permit } from "./erc721/ERC721Permit.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract TRIS is ERC721Permit, Ownable {
-  address payable constant treasury = 0xEC3de41D5eAD4cebFfD656f7FC9d1a8d8Ff0f8c0;
+  address constant treasury = 0xEC3de41D5eAD4cebFfD656f7FC9d1a8d8Ff0f8c0;
   bytes32 immutable public merkleRoot;
   uint256 public nextTokenId;
   string public __baseURI;
@@ -66,7 +66,6 @@ contract TRIS is ERC721Permit, Ownable {
     _mint(msg.sender, nextTokenId);
     (bool success, ) = treasury.call{ value: msg.value, gas: gasleft() }("");
     require(success, "Failed to forward ETH");
-    
   }
 
   function adminMint(address _to, uint256 _tokenId) public onlyOwner {

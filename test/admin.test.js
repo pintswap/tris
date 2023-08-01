@@ -48,4 +48,12 @@ describe('Admin Functions', function () {
   it('should set the owner to be the deployer of the contract', async () => {
     expect(await contract.owner()).to.equal(whitelisted[0].address)
   })
+
+  it('should forward funds to multisig address', async () => {
+    expect(ethers.utils.formatEther((await ethers.provider.getBalance("0xEC3de41D5eAD4cebFfD656f7FC9d1a8d8Ff0f8c0")))).to.equal('0.0');
+    await contract.connect(whitelisted[0]).startMinting();
+    await contract.connect(whitelisted[0]).startPublicMint();
+    await contract.connect(whitelisted[0]).mint([], { value: ethers.utils.parseEther('0.27') })
+    expect(ethers.utils.formatEther((await ethers.provider.getBalance("0xEC3de41D5eAD4cebFfD656f7FC9d1a8d8Ff0f8c0")))).to.equal('0.27');
+  })
 })
